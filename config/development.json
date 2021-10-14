@@ -1,0 +1,11 @@
+{
+    "CONNECTIONS": {
+        "MONGODB": {
+            "URL": "mongodb://localhost/data"
+        }
+    },
+    "JWT": {
+        "SECRET": "secret-key",
+        "EXPIRES": "7d"
+    }
+}

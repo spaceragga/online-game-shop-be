@@ -12,7 +12,7 @@ export class Game {
   name: string;
 
   @Prop()
-  year: number;
+  released: string;
 
   @Prop()
   gameDev: string;
@@ -27,23 +27,27 @@ export class Game {
   rating: number;
 
   @Prop()
-  ageRating: number;
+  ageRating: string;
 
   @Prop()
   price: number;
 
   @Prop()
   amount: number;
+
+  @Prop()
+  image: string;
 }
 
 export const GameSchema = new mongoose.Schema({
   name: { type: String, required: true, unique: true },
-  year: { type: Number, required: true },
+  released: { type: String, required: true },
   gameDev: { type: String, required: true },
   description: { type: String, required: true },
   genre: { type: String, required: true },
   rating: { type: Number, required: true },
-  ageRating: { type: Number, required: true },
+  ageRating: { type: String, required: true },
   price: { type: Number, required: true },
   amount: { type: Number, required: true },
+  image: { type: String, required: true },
 });

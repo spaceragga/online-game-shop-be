@@ -1,11 +1,12 @@
 export class CreateGameDto {
   name: string;
-  year: number;
+  released: string;
   gameDev: string;
   description: string;
   genre: string;
   rating: number;
-  ageRating: number;
+  ageRating: string;
   price: number;
   amount: number;
+  image: string;
 }

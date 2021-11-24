@@ -13,7 +13,7 @@ export const fakeManyUsers = (numUsers): CreateUserDto[] => {
 export const fakeOneGame = (): CreateGameDto => {
   return {
     name: faker.commerce.productName(),
-    year: faker.datatype.number(),
+    released: faker.datatype.number(),
     gameDev: faker.company.companyName(),
     description: faker.commerce.productDescription(),
     genre: faker.music.genre(),
@@ -21,6 +21,7 @@ export const fakeOneGame = (): CreateGameDto => {
     ageRating: faker.datatype.number(),
     price: faker.commerce.price(),
     amount: faker.datatype.number(),
+    image: faker.imageUrl.category(),
   };
 };
 

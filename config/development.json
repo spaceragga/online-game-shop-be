@@ -1,7 +1,7 @@
 {
     "CONNECTIONS": {
         "MONGODB": {
-            "URL": "mongodb://localhost/data"
+            "URL": "mongodb+srv://ivan:qwerty123@cluster0.bjmlb.mongodb.net/data"
         }
     },
     "JWT": {

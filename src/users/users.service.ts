@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+import { Request } from 'express';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './schemas/user.schema';
@@ -13,12 +14,12 @@ export class UsersService {
     return this.usersRepository.findOne({ _id });
   }
 
-  async getUsers(): Promise<User[]> {
-    return this.usersRepository.find({});
+  async getUsers(req: Request): Promise<{ items: User[]; total: number }> {
+    return this.usersRepository.find(req);
   }
 
   async createUser(user: CreateUserDto): Promise<User> {
-    const { email, password } = user;
+    const { email, password, role } = user;
     const existUser = await this.usersRepository.findOne({ email });
     if (existUser) {
       throw new HttpException('user already exists', HttpStatus.BAD_REQUEST);
@@ -26,6 +27,7 @@ export class UsersService {
     return this.usersRepository.create({
       email,
       password,
+      role,
     });
   }
 

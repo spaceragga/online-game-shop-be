@@ -2,6 +2,7 @@ import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
 import { User, UserDocument } from './schemas/user.schema';
+import { getAllUsersResponse } from './schemas/user.types';
 import { UsersService } from './users.service';
 
 @Injectable()
@@ -16,8 +17,22 @@ export class UsersRepository {
     return this.userModel.findOne(userFilterQuery);
   }
 
-  async find(usersFilterQuery: FilterQuery<UserDocument>): Promise<User[]> {
-    return this.userModel.find(usersFilterQuery);
+  async find(
+    usersFilterQuery: FilterQuery<UserDocument>,
+  ): Promise<getAllUsersResponse> {
+    const { page, limit, sortBy, sortRow } = usersFilterQuery.query;
+    const total = await this.userModel.count();
+
+    const items = await this.userModel
+      .find()
+      .sort([[sortRow, sortBy]])
+      .skip(parseInt(page) * parseInt(limit))
+      .limit(parseInt(limit))
+      .exec();
+    return {
+      items,
+      total,
+    };
   }
 
   async create(user: Partial<User>): Promise<User> {

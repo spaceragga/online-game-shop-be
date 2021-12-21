@@ -4,6 +4,7 @@ import { Request } from 'express';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './schemas/user.schema';
+import { getAllUsersResponse } from './schemas/user.types';
 import { UsersRepository } from './users.repository';
 
 @Injectable()
@@ -14,7 +15,7 @@ export class UsersService {
     return this.usersRepository.findOne({ _id });
   }
 
-  async getUsers(req: Request): Promise<{ items: User[]; total: number }> {
+  async getUsers(req: Request): Promise<getAllUsersResponse> {
     return this.usersRepository.find(req);
   }
 

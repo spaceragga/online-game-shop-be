@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
 
 import { Order, OrderDocument } from './schemas/order.schema';
+import { getAllOrdersResponse } from './schemas/order.types';
 @Injectable()
 export class OrdersRepository {
   constructor(
@@ -13,8 +14,22 @@ export class OrdersRepository {
     return this.orderModel.findOne(orderFilterQuery);
   }
 
-  async find(orderFilterQuery: FilterQuery<OrderDocument>) {
-    return this.orderModel.find(orderFilterQuery);
+  async find(
+    orderFilterQuery: FilterQuery<OrderDocument>,
+  ): Promise<getAllOrdersResponse> {
+    const { page, limit, sortBy, sortRow } = orderFilterQuery.query;
+    const total = await this.orderModel.count();
+
+    const items = await this.orderModel
+      .find()
+      .sort([[sortRow, sortBy]])
+      .skip(parseInt(page) * parseInt(limit))
+      .limit(parseInt(limit))
+      .exec();
+    return {
+      items,
+      total,
+    };
   }
 
   async create(order: Partial<Order>): Promise<Order> {

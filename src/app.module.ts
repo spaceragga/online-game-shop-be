@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { GamesModule } from './games/games.module';
 import { AuthModule } from './auth/auth.module';
+import { OrdersModule } from './orders/orders.module';
 
 const MONGODB_URL = config.get<string>('CONNECTIONS.MONGODB.URL');
 
@@ -18,6 +19,7 @@ const MONGODB_URL = config.get<string>('CONNECTIONS.MONGODB.URL');
     UsersModule,
     GamesModule,
     AuthModule,
+    OrdersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

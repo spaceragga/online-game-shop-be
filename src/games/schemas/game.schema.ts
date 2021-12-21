@@ -2,9 +2,17 @@ import { Prop, Schema } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import * as mongoose from 'mongoose';
 
+class GameVersion {
+  physical: number;
+  digital: number;
+}
+
 export type GameDocument = Game & Document;
 @Schema()
 export class Game {
+  @Prop()
+  quantity: GameVersion;
+
   @Prop()
   _id: string;
 
@@ -40,7 +48,11 @@ export class Game {
 }
 
 export const GameSchema = new mongoose.Schema({
-  name: { type: String, required: true, unique: true },
+  quantity: {
+    physical: Number,
+    digital: Number,
+  },
+  name: { type: String, required: true },
   released: { type: String, required: true },
   gameDev: { type: String, required: true },
   description: { type: String, required: true },

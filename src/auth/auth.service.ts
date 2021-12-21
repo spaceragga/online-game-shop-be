@@ -13,7 +13,10 @@ export class AuthService {
 
   async signPayload(user): Promise<string> {
     const payload = {
+      id: user._id.toString(),
       email: user.email,
+      role: user.role,
+      isBlocked: user.isBlocked,
     };
     return sign(payload, JWT.SECRET, { expiresIn: JWT.EXPIRES });
   }

@@ -6,12 +6,14 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
 } from '@nestjs/common';
+import { Request } from 'express';
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
-
 import { Game } from './schemas/game.schema';
 import { GamesService } from './games.service';
+import { getAllGamesResponse } from './schemas/game.types';
 
 @Controller('games')
 export class GamesController {
@@ -23,8 +25,8 @@ export class GamesController {
   }
 
   @Get()
-  async getGames(): Promise<Game[]> {
-    return this.gamesService.getGames();
+  async getGames(@Req() req: Request): Promise<getAllGamesResponse> {
+    return this.gamesService.getGames(req);
   }
 
   @Post()

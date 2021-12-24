@@ -10,8 +10,8 @@ import { getAllOrdersResponse } from './schemas/order.types';
 export class OrdersService {
   constructor(private readonly ordersRepository: OrdersRepository) {}
 
-  async getOrderById(_id: string): Promise<Order> {
-    return this.ordersRepository.findOne({ _id });
+  async getAllById(req: Request): Promise<Order[]> {
+    return this.ordersRepository.findAllById(req);
   }
 
   async getOrders(req: Request): Promise<getAllOrdersResponse> {

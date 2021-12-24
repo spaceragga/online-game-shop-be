@@ -1,17 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
-
 import { Order, OrderDocument } from './schemas/order.schema';
 import { getAllOrdersResponse } from './schemas/order.types';
+
 @Injectable()
 export class OrdersRepository {
   constructor(
     @InjectModel(Order.name) private orderModel: Model<OrderDocument>,
   ) {}
 
-  async findOne(orderFilterQuery: FilterQuery<OrderDocument>): Promise<Order> {
-    return this.orderModel.findOne(orderFilterQuery);
+  async findAllById(
+    orderFilterQuery: FilterQuery<OrderDocument>,
+  ): Promise<Order[]> {
+    const { id, sortBy } = orderFilterQuery.query;
+
+    return this.orderModel.find({ userId: id }).sort([['date', sortBy]]);
   }
 
   async find(
@@ -26,6 +30,7 @@ export class OrdersRepository {
       .skip(parseInt(page) * parseInt(limit))
       .limit(parseInt(limit))
       .exec();
+
     return {
       items,
       total,

@@ -19,9 +19,9 @@ import { getAllOrdersResponse } from './schemas/order.types';
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
-  @Get(':id')
-  async getOrder(@Param('id') id: string): Promise<Order> {
-    return this.ordersService.getOrderById(id);
+  @Get()
+  async getOrdersById(@Req() req: Request): Promise<Order[]> {
+    return this.ordersService.getAllById(req);
   }
 
   @Get()

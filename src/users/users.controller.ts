@@ -9,10 +9,10 @@ import {
   Req,
 } from '@nestjs/common';
 import { Request } from 'express';
+import { PaginatedResponse } from '../types/main.types';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './schemas/user.schema';
-import { getAllUsersResponse } from './schemas/user.types';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -25,7 +25,7 @@ export class UsersController {
   }
 
   @Get()
-  async getUsers(@Req() req: Request): Promise<getAllUsersResponse> {
+  async getUsers(@Req() req: Request): Promise<PaginatedResponse<User>> {
     return this.usersService.getUsers(req);
   }
 

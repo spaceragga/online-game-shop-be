@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 import { Document } from 'mongoose';
 import { Prop, Schema } from '@nestjs/mongoose';
-import { Game, GameSchema } from 'src/games/schemas/game.schema';
+import { Game, GameSchema } from '../../games/schemas/game.schema';
 import { OrderInfo, OrderInfoSchema } from './orderInfo.schema';
 
 export type OrderDocument = Order & Document;

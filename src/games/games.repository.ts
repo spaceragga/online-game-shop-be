@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
-
+import { CommonService } from '../common/common.service';
+import { PaginatedResponse } from '../types/main.types';
 import { Game, GameDocument } from './schemas/game.schema';
-import { getAllGamesResponse } from './schemas/game.types';
+
 @Injectable()
-export class GamesRepository {
-  constructor(@InjectModel(Game.name) private gameModel: Model<GameDocument>) {}
+export class GamesRepository extends CommonService<Game> {
+  constructor(@InjectModel(Game.name) private gameModel: Model<GameDocument>) {
+    super(gameModel);
+  }
 
   async findOne(gameFilterQuery: FilterQuery<GameDocument>): Promise<Game> {
     return this.gameModel.findOne(gameFilterQuery);
@@ -14,20 +17,8 @@ export class GamesRepository {
 
   async find(
     gamesFilterQuery: FilterQuery<GameDocument>,
-  ): Promise<getAllGamesResponse> {
-    const { page, limit, sortBy, sortRow } = gamesFilterQuery.query;
-    const total = await this.gameModel.count();
-
-    const items = await this.gameModel
-      .find()
-      .sort([[sortRow, sortBy]])
-      .skip(parseInt(page) * parseInt(limit))
-      .limit(parseInt(limit))
-      .exec();
-    return {
-      items,
-      total,
-    };
+  ): Promise<PaginatedResponse<Game>> {
+    return this.getEntityWithPagination(gamesFilterQuery.query);
   }
 
   async create(game: Partial<Game>): Promise<Game> {

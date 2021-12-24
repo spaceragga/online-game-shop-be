@@ -1,4 +1,4 @@
-import { Game } from 'src/games/schemas/game.schema';
+import { Game } from '../../games/schemas/game.schema';
 
 export class CreateOrderDto {
   _id: string;

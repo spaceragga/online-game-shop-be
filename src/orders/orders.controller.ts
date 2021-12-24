@@ -13,19 +13,19 @@ import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { Order } from './schemas/order.schema';
-import { getAllOrdersResponse } from './schemas/order.types';
+import { PaginatedResponse } from '../types/main.types';
 
 @Controller('orders')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
-  @Get()
+  @Get('/id')
   async getOrdersById(@Req() req: Request): Promise<Order[]> {
     return this.ordersService.getAllById(req);
   }
 
   @Get()
-  async getOrders(@Req() req: Request): Promise<getAllOrdersResponse> {
+  async getOrders(@Req() req: Request): Promise<PaginatedResponse<Order>> {
     return this.ordersService.getOrders(req);
   }
 

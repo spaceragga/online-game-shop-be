@@ -13,7 +13,7 @@ import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
 import { Game } from './schemas/game.schema';
 import { GamesService } from './games.service';
-import { getAllGamesResponse } from './schemas/game.types';
+import { PaginatedResponse } from '../types/main.types';
 
 @Controller('games')
 export class GamesController {
@@ -25,7 +25,7 @@ export class GamesController {
   }
 
   @Get()
-  async getGames(@Req() req: Request): Promise<getAllGamesResponse> {
+  async getGames(@Req() req: Request): Promise<PaginatedResponse<Game>> {
     return this.gamesService.getGames(req);
   }
 

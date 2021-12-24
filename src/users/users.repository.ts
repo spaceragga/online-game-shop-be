@@ -1,17 +1,20 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
+import { CommonService } from '../common/common.service';
+import { PaginatedResponse } from '../types/main.types';
 import { User, UserDocument } from './schemas/user.schema';
-import { getAllUsersResponse } from './schemas/user.types';
 import { UsersService } from './users.service';
 
 @Injectable()
-export class UsersRepository {
+export class UsersRepository extends CommonService<User> {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @Inject(forwardRef(() => UsersService))
     private readonly usersService: UsersService,
-  ) {}
+  ) {
+    super(userModel);
+  }
 
   async findOne(userFilterQuery: FilterQuery<UserDocument>): Promise<User> {
     return this.userModel.findOne(userFilterQuery);
@@ -19,20 +22,8 @@ export class UsersRepository {
 
   async find(
     usersFilterQuery: FilterQuery<UserDocument>,
-  ): Promise<getAllUsersResponse> {
-    const { page, limit, sortBy, sortRow } = usersFilterQuery.query;
-    const total = await this.userModel.count();
-
-    const items = await this.userModel
-      .find()
-      .sort([[sortRow, sortBy]])
-      .skip(parseInt(page) * parseInt(limit))
-      .limit(parseInt(limit))
-      .exec();
-    return {
-      items,
-      total,
-    };
+  ): Promise<PaginatedResponse<User>> {
+    return this.getEntityWithPagination(usersFilterQuery.query);
   }
 
   async create(user: Partial<User>): Promise<User> {

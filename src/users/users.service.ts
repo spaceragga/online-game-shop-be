@@ -1,10 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { Request } from 'express';
+import { PaginatedResponse } from '../types/main.types';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './schemas/user.schema';
-import { getAllUsersResponse } from './schemas/user.types';
 import { UsersRepository } from './users.repository';
 
 @Injectable()
@@ -15,7 +15,7 @@ export class UsersService {
     return this.usersRepository.findOne({ _id });
   }
 
-  async getUsers(req: Request): Promise<getAllUsersResponse> {
+  async getUsers(req: Request): Promise<PaginatedResponse<User>> {
     return this.usersRepository.find(req);
   }
 

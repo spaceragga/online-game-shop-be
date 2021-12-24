@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { Request } from 'express';
+import { PaginatedResponse } from '../types/main.types';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { OrdersRepository } from './orders.repository';
 import { Order } from './schemas/order.schema';
-import { getAllOrdersResponse } from './schemas/order.types';
 
 @Injectable()
 export class OrdersService {
@@ -14,7 +14,7 @@ export class OrdersService {
     return this.ordersRepository.findAllById(req);
   }
 
-  async getOrders(req: Request): Promise<getAllOrdersResponse> {
+  async getOrders(req: Request): Promise<PaginatedResponse<Order>> {
     return this.ordersRepository.find(req);
   }
 

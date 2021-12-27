@@ -20,22 +20,22 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get(':id')
-  async getUser(@Param('id') id: string): Promise<User> {
+  getUser(@Param('id') id: string): Promise<User> {
     return this.usersService.getUserById(id);
   }
 
   @Get()
-  async getUsers(@Req() req: Request): Promise<PaginatedResponse<User>> {
+  getUsers(@Req() req: Request): Promise<PaginatedResponse<User>> {
     return this.usersService.getUsers(req);
   }
 
   @Post()
-  async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
+  createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.createUser(createUserDto);
   }
 
   @Patch(':id')
-  async updateUser(
+  updateUser(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<User> {
@@ -43,7 +43,7 @@ export class UsersController {
   }
 
   @Delete(':id')
-  async deleteUser(@Param('id') id: string): Promise<User> {
+  deleteUser(@Param('id') id: string): Promise<User> {
     return this.usersService.deleteUserById(id);
   }
 }

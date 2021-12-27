@@ -20,7 +20,7 @@ export class UsersRepository extends CommonService<User> {
     return this.userModel.findOne(userFilterQuery);
   }
 
-  async find(
+  find(
     usersFilterQuery: FilterQuery<UserDocument>,
   ): Promise<PaginatedResponse<User>> {
     return this.getEntityWithPagination(usersFilterQuery.query);

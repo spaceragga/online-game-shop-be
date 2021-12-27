@@ -20,22 +20,22 @@ export class GamesController {
   constructor(private readonly gamesService: GamesService) {}
 
   @Get(':id')
-  async getGame(@Param('id') id: string): Promise<Game> {
+  getGame(@Param('id') id: string): Promise<Game> {
     return this.gamesService.getGameById(id);
   }
 
   @Get()
-  async getGames(@Req() req: Request): Promise<PaginatedResponse<Game>> {
+  getGames(@Req() req: Request): Promise<PaginatedResponse<Game>> {
     return this.gamesService.getGames(req);
   }
 
   @Post()
-  async createGame(@Body() createGameDto: CreateGameDto): Promise<Game> {
+  createGame(@Body() createGameDto: CreateGameDto): Promise<Game> {
     return this.gamesService.createGame(createGameDto);
   }
 
   @Patch(':id')
-  async updateGame(
+  updateGame(
     @Param('id') id: string,
     @Body() updateGameDto: UpdateGameDto,
   ): Promise<Game> {
@@ -43,7 +43,7 @@ export class GamesController {
   }
 
   @Delete(':id')
-  async deleteGame(@Param('id') id: string): Promise<Game> {
+  deleteGame(@Param('id') id: string): Promise<Game> {
     return this.gamesService.deleteGameById(id);
   }
 }

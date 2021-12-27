@@ -11,11 +11,11 @@ import { UsersRepository } from './users.repository';
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
-  async getUserById(_id: string): Promise<User> {
+  getUserById(_id: string): Promise<User> {
     return this.usersRepository.findOne({ _id });
   }
 
-  async getUsers(req: Request): Promise<PaginatedResponse<User>> {
+  getUsers(req: Request): Promise<PaginatedResponse<User>> {
     return this.usersRepository.find(req);
   }
 
@@ -32,11 +32,11 @@ export class UsersService {
     });
   }
 
-  async updateUser(_id: string, userUpdates: UpdateUserDto): Promise<User> {
+  updateUser(_id: string, userUpdates: UpdateUserDto): Promise<User> {
     return this.usersRepository.findOneAndUpdate({ _id }, userUpdates);
   }
 
-  async deleteUserById(_id: string): Promise<User> {
+  deleteUserById(_id: string): Promise<User> {
     return this.usersRepository.delete({ _id });
   }
 

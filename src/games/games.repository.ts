@@ -15,13 +15,13 @@ export class GamesRepository extends CommonService<Game> {
     return this.gameModel.findOne(gameFilterQuery);
   }
 
-  async find(
+  find(
     gamesFilterQuery: FilterQuery<GameDocument>,
   ): Promise<PaginatedResponse<Game>> {
     return this.getEntityWithPagination(gamesFilterQuery.query);
   }
 
-  async create(game: Partial<Game>): Promise<Game> {
+  create(game: Partial<Game>): Promise<Game> {
     return this.gameModel.create(game);
   }
 

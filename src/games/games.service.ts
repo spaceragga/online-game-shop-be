@@ -10,23 +10,23 @@ import { PaginatedResponse } from '../types/main.types';
 export class GamesService {
   constructor(private readonly gamesRepository: GamesRepository) {}
 
-  async getGameById(_id: string): Promise<Game> {
+  getGameById(_id: string): Promise<Game> {
     return this.gamesRepository.findOne({ _id });
   }
 
-  async getGames(req: Request): Promise<PaginatedResponse<Game>> {
+  getGames(req: Request): Promise<PaginatedResponse<Game>> {
     return this.gamesRepository.find(req);
   }
 
-  async createGame(createGameDto: CreateGameDto): Promise<Game> {
+  createGame(createGameDto: CreateGameDto): Promise<Game> {
     return this.gamesRepository.create(createGameDto);
   }
 
-  async updateGame(_id: string, gameUpdates: UpdateGameDto): Promise<Game> {
+  updateGame(_id: string, gameUpdates: UpdateGameDto): Promise<Game> {
     return this.gamesRepository.findOneAndUpdate({ _id }, gameUpdates);
   }
 
-  async deleteGameById(_id: string): Promise<Game> {
+  deleteGameById(_id: string): Promise<Game> {
     return this.gamesRepository.delete({ _id });
   }
 }

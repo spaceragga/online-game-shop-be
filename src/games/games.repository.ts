@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
 import { CommonService } from '../common/common.service';
 import { PaginatedResponse } from '../types/main.types';
+import { GetGamesQuery } from './dto/game-query.dto';
 import { Game, GameDocument } from './schemas/game.schema';
 
 @Injectable()
@@ -16,9 +17,9 @@ export class GamesRepository extends CommonService<Game> {
   }
 
   find(
-    gamesFilterQuery: FilterQuery<GameDocument>,
+    gamesFilterQuery: FilterQuery<GetGamesQuery>,
   ): Promise<PaginatedResponse<Game>> {
-    return this.getEntityWithPagination(gamesFilterQuery.query);
+    return this.getEntityWithPagination(gamesFilterQuery);
   }
 
   create(game: Partial<Game>): Promise<Game> {

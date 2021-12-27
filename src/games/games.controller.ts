@@ -6,14 +6,14 @@ import {
   Patch,
   Param,
   Delete,
-  Req,
+  Query,
 } from '@nestjs/common';
-import { Request } from 'express';
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
 import { Game } from './schemas/game.schema';
 import { GamesService } from './games.service';
 import { PaginatedResponse } from '../types/main.types';
+import { GetGamesQuery } from './dto/game-query.dto';
 
 @Controller('games')
 export class GamesController {
@@ -25,8 +25,10 @@ export class GamesController {
   }
 
   @Get()
-  getGames(@Req() req: Request): Promise<PaginatedResponse<Game>> {
-    return this.gamesService.getGames(req);
+  getGames(
+    @Query() queryParams: GetGamesQuery,
+  ): Promise<PaginatedResponse<Game>> {
+    return this.gamesService.getGames(queryParams);
   }
 
   @Post()

@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { Request } from 'express';
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
 import { Game } from './schemas/game.schema';
 import { GamesRepository } from './games.repository';
 import { PaginatedResponse } from '../types/main.types';
+import { GetGamesQuery } from './dto/game-query.dto';
 
 @Injectable()
 export class GamesService {
@@ -14,8 +14,8 @@ export class GamesService {
     return this.gamesRepository.findOne({ _id });
   }
 
-  getGames(req: Request): Promise<PaginatedResponse<Game>> {
-    return this.gamesRepository.find(req);
+  getGames(queryParams: GetGamesQuery): Promise<PaginatedResponse<Game>> {
+    return this.gamesRepository.find(queryParams);
   }
 
   createGame(createGameDto: CreateGameDto): Promise<Game> {

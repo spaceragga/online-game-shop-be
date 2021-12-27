@@ -6,12 +6,12 @@ import {
   Param,
   Patch,
   Post,
-  Req,
+  Query,
 } from '@nestjs/common';
-import { Request } from 'express';
 import { PaginatedResponse } from '../types/main.types';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { GetUsersQuery } from './dto/user-query.dto';
 import { User } from './schemas/user.schema';
 import { UsersService } from './users.service';
 
@@ -25,8 +25,10 @@ export class UsersController {
   }
 
   @Get()
-  getUsers(@Req() req: Request): Promise<PaginatedResponse<User>> {
-    return this.usersService.getUsers(req);
+  getUsers(
+    @Query() queryParams: GetUsersQuery,
+  ): Promise<PaginatedResponse<User>> {
+    return this.usersService.getUsers(queryParams);
   }
 
   @Post()

@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
 import { CommonService } from '../common/common.service';
 import { PaginatedResponse } from '../types/main.types';
+import { GetUsersQuery } from './dto/user-query.dto';
 import { User, UserDocument } from './schemas/user.schema';
 import { UsersService } from './users.service';
 
@@ -21,9 +22,9 @@ export class UsersRepository extends CommonService<User> {
   }
 
   find(
-    usersFilterQuery: FilterQuery<UserDocument>,
+    usersFilterQuery: FilterQuery<GetUsersQuery>,
   ): Promise<PaginatedResponse<User>> {
-    return this.getEntityWithPagination(usersFilterQuery.query);
+    return this.getEntityWithPagination(usersFilterQuery);
   }
 
   async create(user: Partial<User>): Promise<User> {

@@ -6,10 +6,12 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
+import { PaginatedResponse } from '../types/main.types';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-
+import { GetUsersQuery } from './dto/user-query.dto';
 import { User } from './schemas/user.schema';
 import { UsersService } from './users.service';
 
@@ -18,22 +20,24 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get(':id')
-  async getUser(@Param('id') id: string): Promise<User> {
+  getUser(@Param('id') id: string): Promise<User> {
     return this.usersService.getUserById(id);
   }
 
   @Get()
-  async getUsers(): Promise<User[]> {
-    return this.usersService.getUsers();
+  getUsers(
+    @Query() queryParams: GetUsersQuery,
+  ): Promise<PaginatedResponse<User>> {
+    return this.usersService.getUsers(queryParams);
   }
 
   @Post()
-  async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
+  createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.createUser(createUserDto);
   }
 
   @Patch(':id')
-  async updateUser(
+  updateUser(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<User> {
@@ -41,7 +45,7 @@ export class UsersController {
   }
 
   @Delete(':id')
-  async deleteUser(@Param('id') id: string): Promise<User> {
+  deleteUser(@Param('id') id: string): Promise<User> {
     return this.usersService.deleteUserById(id);
   }
 }

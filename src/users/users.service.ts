@@ -1,7 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+import { PaginatedResponse } from '../types/main.types';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { GetUsersQuery } from './dto/user-query.dto';
 import { User, UserDocument } from './schemas/user.schema';
 import { UsersRepository } from './users.repository';
 
@@ -9,16 +11,16 @@ import { UsersRepository } from './users.repository';
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
-  async getUserById(_id: string): Promise<User> {
+  getUserById(_id: string): Promise<User> {
     return this.usersRepository.findOne({ _id });
   }
 
-  async getUsers(): Promise<User[]> {
-    return this.usersRepository.find({});
+  getUsers(queryParams: GetUsersQuery): Promise<PaginatedResponse<User>> {
+    return this.usersRepository.find(queryParams);
   }
 
   async createUser(user: CreateUserDto): Promise<User> {
-    const { email, password } = user;
+    const { email, password, role } = user;
     const existUser = await this.usersRepository.findOne({ email });
     if (existUser) {
       throw new HttpException('user already exists', HttpStatus.BAD_REQUEST);
@@ -26,14 +28,15 @@ export class UsersService {
     return this.usersRepository.create({
       email,
       password,
+      role,
     });
   }
 
-  async updateUser(_id: string, userUpdates: UpdateUserDto): Promise<User> {
+  updateUser(_id: string, userUpdates: UpdateUserDto): Promise<User> {
     return this.usersRepository.findOneAndUpdate({ _id }, userUpdates);
   }
 
-  async deleteUserById(_id: string): Promise<User> {
+  deleteUserById(_id: string): Promise<User> {
     return this.usersRepository.delete({ _id });
   }
 

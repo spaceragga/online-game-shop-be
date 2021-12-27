@@ -2,6 +2,7 @@ import { Prop, Schema } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import * as mongoose from 'mongoose';
 import * as bcrypt from 'bcrypt';
+import { Role } from './role.enum';
 
 export type UserDocument = User & Document;
 
@@ -15,11 +16,23 @@ export class User {
 
   @Prop()
   password: string;
+
+  @Prop()
+  role: Role;
+
+  @Prop()
+  isBlocked: boolean;
+
+  @Prop()
+  date: Date;
 }
 
 export const UserSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  role: { type: String, enum: Role, default: Role.USER },
+  isBlocked: { type: Boolean, default: false },
+  date: { type: Date, default: Date.now },
 });
 
 UserSchema.pre('save', async function (next) {

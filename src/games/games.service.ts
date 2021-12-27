@@ -3,28 +3,30 @@ import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
 import { Game } from './schemas/game.schema';
 import { GamesRepository } from './games.repository';
+import { PaginatedResponse } from '../types/main.types';
+import { GetGamesQuery } from './dto/game-query.dto';
 
 @Injectable()
 export class GamesService {
   constructor(private readonly gamesRepository: GamesRepository) {}
 
-  async getGameById(_id: string): Promise<Game> {
+  getGameById(_id: string): Promise<Game> {
     return this.gamesRepository.findOne({ _id });
   }
 
-  async getGames(): Promise<Game[]> {
-    return this.gamesRepository.find({});
+  getGames(queryParams: GetGamesQuery): Promise<PaginatedResponse<Game>> {
+    return this.gamesRepository.find(queryParams);
   }
 
-  async createGame(createGameDto: CreateGameDto): Promise<Game> {
+  createGame(createGameDto: CreateGameDto): Promise<Game> {
     return this.gamesRepository.create(createGameDto);
   }
 
-  async updateGame(_id: string, gameUpdates: UpdateGameDto): Promise<Game> {
+  updateGame(_id: string, gameUpdates: UpdateGameDto): Promise<Game> {
     return this.gamesRepository.findOneAndUpdate({ _id }, gameUpdates);
   }
 
-  async deleteGameById(_id: string): Promise<Game> {
+  deleteGameById(_id: string): Promise<Game> {
     return this.gamesRepository.delete({ _id });
   }
 }

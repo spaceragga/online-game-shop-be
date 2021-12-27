@@ -6,36 +6,38 @@ import {
   Patch,
   Param,
   Delete,
-  Req,
+  Query,
 } from '@nestjs/common';
-import { Request } from 'express';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { Order } from './schemas/order.schema';
 import { PaginatedResponse } from '../types/main.types';
+import { GetOrdersByIdQuery, GetOrdersQuery } from './dto/order-query.dto';
 
 @Controller('orders')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
   @Get('/id')
-  async getOrdersById(@Req() req: Request): Promise<Order[]> {
-    return this.ordersService.getAllById(req);
+  getOrdersById(@Query() queryParams: GetOrdersByIdQuery): Promise<Order[]> {
+    return this.ordersService.getAllById(queryParams);
   }
 
   @Get()
-  async getOrders(@Req() req: Request): Promise<PaginatedResponse<Order>> {
-    return this.ordersService.getOrders(req);
+  getOrders(
+    @Query() queryParams: GetOrdersQuery,
+  ): Promise<PaginatedResponse<Order>> {
+    return this.ordersService.getOrders(queryParams);
   }
 
   @Post()
-  async createOrder(@Body() createOrderDto: CreateOrderDto): Promise<Order> {
+  createOrder(@Body() createOrderDto: CreateOrderDto): Promise<Order> {
     return this.ordersService.createOrder(createOrderDto);
   }
 
   @Patch(':id')
-  async updateOrder(
+  updateOrder(
     @Param('id') id: string,
     @Body() updateOrderDto: UpdateOrderDto,
   ): Promise<Order> {
@@ -43,7 +45,7 @@ export class OrdersController {
   }
 
   @Delete(':id')
-  async deleteOrder(@Param('id') id: string): Promise<Order> {
+  deleteOrder(@Param('id') id: string): Promise<Order> {
     return this.ordersService.deleteOrderById(id);
   }
 }

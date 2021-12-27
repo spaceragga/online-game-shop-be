@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
-import { CommonService } from 'src/common/common.service';
+import { CommonService } from '../common/common.service';
 import { PaginatedResponse } from '../types/main.types';
+import { GetOrdersByIdQuery, GetOrdersQuery } from './dto/order-query.dto';
 import { Order, OrderDocument } from './schemas/order.schema';
 
 @Injectable()
@@ -14,20 +15,20 @@ export class OrdersRepository extends CommonService<Order> {
   }
 
   async findAllById(
-    orderFilterQuery: FilterQuery<OrderDocument>,
+    orderFilterQuery: FilterQuery<GetOrdersByIdQuery>,
   ): Promise<Order[]> {
-    const { id, sortBy } = orderFilterQuery.query;
+    const { id, sortBy } = orderFilterQuery;
 
     return this.orderModel.find({ userId: id }).sort([['date', sortBy]]);
   }
 
-  async find(
-    orderFilterQuery: FilterQuery<OrderDocument>,
+  find(
+    orderFilterQuery: FilterQuery<GetOrdersQuery>,
   ): Promise<PaginatedResponse<Order>> {
-    return this.getEntityWithPagination(orderFilterQuery.query);
+    return this.getEntityWithPagination(orderFilterQuery);
   }
 
-  async create(order: Partial<Order>): Promise<Order> {
+  create(order: Partial<Order>): Promise<Order> {
     return this.orderModel.create(order);
   }
 

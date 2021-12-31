@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Request } from 'express';
 import { PaginatedResponse } from '../types/main.types';
+import { GetQueryDTO } from '../types/validators';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { GetOrdersByIdQuery, GetOrdersQuery } from './dto/order-query.dto';
+import { GetOrdersByIdQuery } from './dto/order-query.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { OrdersRepository } from './orders.repository';
 import { Order } from './schemas/order.schema';
@@ -15,7 +15,7 @@ export class OrdersService {
     return this.ordersRepository.findAllById(queryParams);
   }
 
-  getOrders(queryParams: GetOrdersQuery): Promise<PaginatedResponse<Order>> {
+  getOrders(queryParams: GetQueryDTO): Promise<PaginatedResponse<Order>> {
     return this.ordersRepository.find(queryParams);
   }
 

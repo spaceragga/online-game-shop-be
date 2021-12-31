@@ -13,7 +13,8 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { Order } from './schemas/order.schema';
 import { PaginatedResponse } from '../types/main.types';
-import { GetOrdersByIdQuery, GetOrdersQuery } from './dto/order-query.dto';
+import { GetOrdersByIdQuery } from './dto/order-query.dto';
+import { GetQueryDTO } from '../types/validators';
 
 @Controller('orders')
 export class OrdersController {
@@ -26,7 +27,7 @@ export class OrdersController {
 
   @Get()
   getOrders(
-    @Query() queryParams: GetOrdersQuery,
+    @Query() queryParams: GetQueryDTO,
   ): Promise<PaginatedResponse<Order>> {
     return this.ordersService.getOrders(queryParams);
   }

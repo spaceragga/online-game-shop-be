@@ -17,6 +17,7 @@ export class AuthService {
       email: user.email,
       role: user.role,
       isBlocked: user.isBlocked,
+      profilePhoto: user.profilePhoto,
     };
     return sign(payload, JWT.SECRET, { expiresIn: JWT.EXPIRES });
   }

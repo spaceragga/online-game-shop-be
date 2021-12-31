@@ -7,17 +7,24 @@ import {
   Patch,
   Post,
   Query,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { AuthService } from '../auth/auth.service';
 import { PaginatedResponse } from '../types/main.types';
+import { GetQueryDTO } from '../types/validators';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { GetUsersQuery } from './dto/user-query.dto';
 import { User } from './schemas/user.schema';
 import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly authService: AuthService,
+  ) {}
 
   @Get(':id')
   getUser(@Param('id') id: string): Promise<User> {
@@ -26,7 +33,7 @@ export class UsersController {
 
   @Get()
   getUsers(
-    @Query() queryParams: GetUsersQuery,
+    @Query() queryParams: GetQueryDTO,
   ): Promise<PaginatedResponse<User>> {
     return this.usersService.getUsers(queryParams);
   }
@@ -34,6 +41,17 @@ export class UsersController {
   @Post()
   createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.createUser(createUserDto);
+  }
+
+  @Patch('upload')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadImage(
+    @UploadedFile() file: Express.Multer.File,
+    @Query('id') id: string,
+  ): Promise<string> {
+    const user = await this.usersService.uploadProfilePhoto(file, id);
+
+    return this.authService.signPayload(user);
   }
 
   @Patch(':id')

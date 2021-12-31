@@ -3,6 +3,7 @@ import { Document } from 'mongoose';
 import * as mongoose from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { Role } from './role.enum';
+import { DEFAULT_PHOTO_URL } from '../../../config/constants';
 
 export type UserDocument = User & Document;
 
@@ -24,6 +25,9 @@ export class User {
   isBlocked: boolean;
 
   @Prop()
+  profilePhoto: string;
+
+  @Prop()
   date: Date;
 }
 
@@ -32,6 +36,7 @@ export const UserSchema = new mongoose.Schema({
   password: { type: String, required: true },
   role: { type: String, enum: Role, default: Role.USER },
   isBlocked: { type: Boolean, default: false },
+  profilePhoto: { type: String, default: DEFAULT_PHOTO_URL },
   date: { type: Date, default: Date.now },
 });
 

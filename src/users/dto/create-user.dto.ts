@@ -24,4 +24,7 @@ export class CreateUserDto {
 
   @IsDate()
   date: Date;
+
+  @IsString()
+  profilePhoto: string;
 }

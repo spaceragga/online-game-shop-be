@@ -13,11 +13,28 @@ import { UpdateGameDto } from './dto/update-game.dto';
 import { Game } from './schemas/game.schema';
 import { GamesService } from './games.service';
 import { PaginatedResponse } from '../types/main.types';
-import { GetGamesQuery } from './dto/game-query.dto';
+import { GetQueryDTO } from '../types/validators';
 
 @Controller('games')
 export class GamesController {
   constructor(private readonly gamesService: GamesService) {}
+
+  @Get('tags')
+  getGameTags(): Promise<string[]> {
+    return this.gamesService.getGameTags();
+  }
+
+  @Get('search')
+  getSearchGames(@Query() { query }: { query: string }): Promise<Game[]> {
+    console.log(query);
+    return this.gamesService.getSearchGames(query);
+  }
+
+  @Get('search/options')
+  getSearchOptions(@Query() { query }: { query: string }): Promise<string[]> {
+    console.log(query);
+    return this.gamesService.getSearchOptions(query);
+  }
 
   @Get(':id')
   getGame(@Param('id') id: string): Promise<Game> {
@@ -26,8 +43,9 @@ export class GamesController {
 
   @Get()
   getGames(
-    @Query() queryParams: GetGamesQuery,
+    @Query() queryParams: GetQueryDTO,
   ): Promise<PaginatedResponse<Game>> {
+    console.log(queryParams);
     return this.gamesService.getGames(queryParams);
   }
 

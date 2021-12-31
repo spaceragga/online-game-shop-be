@@ -10,12 +10,13 @@ export class CommonService<T> {
   async getEntityWithPagination(
     options: FilterQuery<T>,
   ): Promise<PaginatedResponse<T>> {
-    const { page, limit, sortBy, sortRow } = options;
+    const { page, limit, sortBy, sortRow, category } = options;
+    const filterBy = category === 'All' || !category ? {} : { genre: category };
 
     const [total, items] = await Promise.all([
-      this.repository.countDocuments(),
+      this.repository.countDocuments(filterBy),
       this.repository
-        .find()
+        .find(filterBy)
         .sort([[sortRow, sortBy]])
         .skip(parseInt(page) * parseInt(limit))
         .limit(parseInt(limit))

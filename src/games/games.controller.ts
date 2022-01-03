@@ -7,6 +7,8 @@ import {
   Param,
   Delete,
   Query,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
@@ -14,6 +16,8 @@ import { Game } from './schemas/game.schema';
 import { GamesService } from './games.service';
 import { PaginatedResponse } from '../types/main.types';
 import { GetQueryDTO } from '../types/validators';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { UploadApiErrorResponse, UploadApiResponse } from 'cloudinary';
 
 @Controller('games')
 export class GamesController {
@@ -52,6 +56,14 @@ export class GamesController {
   @Post()
   createGame(@Body() createGameDto: CreateGameDto): Promise<Game> {
     return this.gamesService.createGame(createGameDto);
+  }
+
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file'))
+  uploadGameImage(
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<UploadApiResponse | UploadApiErrorResponse> {
+    return this.gamesService.uploadGameImage(file);
   }
 
   @Patch(':id')

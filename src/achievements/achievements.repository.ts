@@ -27,6 +27,10 @@ export class AchievementsRepository extends CommonService<Achievement> {
     return this.getEntityWithPagination(achievementFilterQuery);
   }
 
+  async findAll(): Promise<Achievement[]> {
+    return this.achievementModel.find({});
+  }
+
   create(achievement: Partial<Achievement>): Promise<Achievement> {
     return this.achievementModel.create(achievement);
   }
@@ -44,7 +48,7 @@ export class AchievementsRepository extends CommonService<Achievement> {
     );
   }
 
-  async delete(id: Partial<Achievement>): Promise<Achievement> {
-    return this.achievementModel.findOneAndDelete(id);
+  async delete(id: string): Promise<Achievement> {
+    return this.achievementModel.findOneAndDelete({ _id: id });
   }
 }

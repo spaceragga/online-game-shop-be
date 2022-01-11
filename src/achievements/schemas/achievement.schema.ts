@@ -19,6 +19,9 @@ export class Achievement {
   discount: number;
 
   @Prop()
+  image: string;
+
+  @Prop()
   date: Date;
 }
 
@@ -26,5 +29,6 @@ export const AchievementSchema = new mongoose.Schema({
   name: { type: String, required: true, unique: true },
   description: { type: String, required: true },
   discount: { type: Number },
+  image: { type: String },
   date: { type: Date, default: Date.now },
 });

@@ -8,7 +8,7 @@ import {
   Delete,
   Query,
 } from '@nestjs/common';
-import { PaginatedResponse } from '../types/main.types';
+import { DiscountResponse, PaginatedResponse } from '../types/main.types';
 import { GetQueryDTO } from '../types/validators';
 import { AchievementsService } from './achievements.service';
 import { CreateAchievementDto } from './dto/create-achievement.dto';
@@ -28,8 +28,12 @@ export class AchievementsController {
   getAchievements(
     @Query() queryParams: GetQueryDTO,
   ): Promise<PaginatedResponse<Achievement>> {
-    console.log(queryParams);
     return this.achievementsService.getAchievements(queryParams);
+  }
+
+  @Get('user/id')
+  getUserDiscount(@Query() { id }: { id: string }): Promise<DiscountResponse> {
+    return this.achievementsService.getUserDiscount(id);
   }
 
   @Post()
@@ -47,8 +51,10 @@ export class AchievementsController {
     return this.achievementsService.updateAchievement(id, updateAchievementDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string): Promise<Achievement> {
-    return this.achievementsService.deleteAchievementById(id);
+  @Delete()
+  removeAchievements(
+    @Query() { ids }: { ids: string[] },
+  ): Promise<Achievement[]> {
+    return this.achievementsService.deleteAchievementsById(ids);
   }
 }

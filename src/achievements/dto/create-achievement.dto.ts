@@ -10,6 +10,9 @@ export class CreateAchievementDto {
   @IsInt()
   discount: number;
 
+  @IsString()
+  image: string;
+
   @IsDate()
   date: Date;
 }

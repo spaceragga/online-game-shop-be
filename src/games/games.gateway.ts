@@ -1,6 +1,5 @@
 import { Inject, Logger } from '@nestjs/common';
 import {
-  ConnectedSocket,
   MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
@@ -9,7 +8,7 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { Server, Socket } from 'socket.io';
+import { Server } from 'socket.io';
 import { GamesService } from './games.service';
 import { Game } from './schemas/game.schema';
 
@@ -29,45 +28,63 @@ export class GamesGateway
   private logger: Logger = new Logger('MessageGateway');
   private count = 0;
 
-  public async handleConnection(client: Socket, ...args: any[]) {
+  private bookingOrders = [];
+
+  public async handleConnection() {
     this.count += 1;
     this.logger.log(`Connected: ${this.count} connection`);
-    // const games = await this.gamesService.getGames();
-    // client.emit('GET_ALL_GAMES', games);
   }
 
-  handleDisconnect(client: Socket) {
+  handleDisconnect() {
     this.count -= 1;
     this.logger.log(`Disconnected: ${this.count} connections`);
   }
 
-  afterInit(server: Server) {
+  afterInit() {
     this.logger.log('GamesGateway initialized');
   }
 
-  @SubscribeMessage('ADD_NEW_GAME')
-  async handleNewGame(
-    // @ConnectedSocket() client: Socket,
-    @MessageBody() data: Game,
-  ): Promise<void> {
-    await this.gamesService.createGame(data);
-    // const games = await this.gamesService.getGames();
+  @SubscribeMessage('BOOKING_ORDERS')
+  async handleBooking(@MessageBody() data: Game[]): Promise<boolean> {
+    this.bookingOrders = data;
+    const newValues = await this.gamesService.checkBookingOrders(
+      data,
+      'addBooking',
+    );
 
-    // this.server.emit('REFRESH_GAMES', games);
+    await Promise.all(
+      newValues.map((item) =>
+        this.gamesService.updateGame(item.id, item.gameUpdates),
+      ),
+    );
+
+    setTimeout(async () => {
+      if (this.bookingOrders.length) {
+        await this.handleAbortBooking();
+      }
+    }, 900_000);
+
+    return this.server.emit('BOOKING_SUCCESS');
   }
 
-  @SubscribeMessage('DELETE_GAME')
-  async handleDeleteGame(@MessageBody() data: string[]): Promise<void> {
-    // data.forEach(async (id) => await this.gamesService.deleteGameById(id));
-    // const games = await this.gamesService.getGames();
-    // this.server.emit('REFRESH_GAMES', games);
+  @SubscribeMessage('ABORT_BOOKING_ORDERS')
+  async handleAbortBooking(): Promise<boolean> {
+    const newValues = await this.gamesService.checkBookingOrders(
+      this.bookingOrders,
+      'abortBooking',
+    );
+
+    await Promise.all(
+      newValues.map((item) =>
+        this.gamesService.updateGame(item.id, item.gameUpdates),
+      ),
+    );
+
+    return this.server.emit('ABORT_BOOKING');
   }
 
-  @SubscribeMessage('CHANGE_GAME')
-  async handleChangeGame(@MessageBody() data): Promise<void> {
-    await this.gamesService.updateGame(data.id, data.game);
-    // const games = await this.gamesService.getGames();
-
-    // this.server.emit('REFRESH_GAMES', games);
+  @SubscribeMessage('CONFIRM_BOOKING')
+  handleConfirmBooking(): void {
+    this.bookingOrders = [];
   }
 }

@@ -30,13 +30,11 @@ export class GamesController {
 
   @Get('search')
   getSearchGames(@Query() { query }: { query: string }): Promise<Game[]> {
-    console.log(query);
     return this.gamesService.getSearchGames(query);
   }
 
   @Get('search/options')
   getSearchOptions(@Query() { query }: { query: string }): Promise<string[]> {
-    console.log(query);
     return this.gamesService.getSearchOptions(query);
   }
 
@@ -49,7 +47,6 @@ export class GamesController {
   getGames(
     @Query() queryParams: GetQueryDTO,
   ): Promise<PaginatedResponse<Game>> {
-    console.log(queryParams);
     return this.gamesService.getGames(queryParams);
   }
 

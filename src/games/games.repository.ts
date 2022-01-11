@@ -43,8 +43,8 @@ export class GamesRepository extends CommonService<Game> {
     return names.concat(gameDev);
   }
 
-  async findOne(gameFilterQuery: FilterQuery<GameDocument>): Promise<Game> {
-    return this.gameModel.findOne(gameFilterQuery);
+  async findOne(id: string): Promise<Game> {
+    return this.gameModel.findOne({ _id: id });
   }
 
   find(
@@ -58,10 +58,10 @@ export class GamesRepository extends CommonService<Game> {
   }
 
   async findOneAndUpdate(
-    gameFilterQuery: FilterQuery<GameDocument>,
-    game: Partial<Game>,
+    id: string,
+    gameUpdates: Partial<Game>,
   ): Promise<Game> {
-    return this.gameModel.findOneAndUpdate(gameFilterQuery, game, {
+    return this.gameModel.findOneAndUpdate({ _id: id }, gameUpdates, {
       new: true,
     });
   }

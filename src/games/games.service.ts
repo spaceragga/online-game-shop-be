@@ -3,7 +3,7 @@ import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
 import { Game } from './schemas/game.schema';
 import { GamesRepository } from './games.repository';
-import { PaginatedResponse } from '../types/main.types';
+import { BookingResponse, PaginatedResponse } from '../types/main.types';
 import { GetQueryDTO } from '../types/validators';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { UploadApiErrorResponse, UploadApiResponse } from 'cloudinary';
@@ -27,8 +27,8 @@ export class GamesService {
     return this.gamesRepository.findOptionsByQuery(queryParams);
   }
 
-  getGameById(_id: string): Promise<Game> {
-    return this.gamesRepository.findOne({ _id });
+  getGameById(id: string): Promise<Game> {
+    return this.gamesRepository.findOne(id);
   }
 
   getGames(queryParams: GetQueryDTO): Promise<PaginatedResponse<Game>> {
@@ -47,14 +47,32 @@ export class GamesService {
     });
   }
 
-  updateGame(_id: string, gameUpdates: UpdateGameDto): Promise<Game> {
-    return this.gamesRepository.findOneAndUpdate({ _id }, gameUpdates);
+  updateGame(id: string, gameUpdates: UpdateGameDto): Promise<Game> {
+    return this.gamesRepository.findOneAndUpdate(id, gameUpdates);
   }
 
   deleteGamesById(ids: string[]): Promise<Game[]> {
     return Promise.all(
       ids.map((id) => {
         return this.gamesRepository.delete(id);
+      }),
+    );
+  }
+
+  async checkBookingOrders(
+    data: Game[],
+    action: string,
+  ): Promise<BookingResponse[]> {
+    return await Promise.all(
+      data.map(async (el) => {
+        const game = await this.gamesRepository.findOne(el._id);
+        const gameAmount =
+          action === 'addBooking'
+            ? game.amount - el.quantity.physical
+            : action === 'abortBooking'
+            ? game.amount + el.quantity.physical
+            : null;
+        return { id: el._id, gameUpdates: { amount: gameAmount } };
       }),
     );
   }

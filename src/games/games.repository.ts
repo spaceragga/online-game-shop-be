@@ -66,7 +66,7 @@ export class GamesRepository extends CommonService<Game> {
     });
   }
 
-  async delete(id: Partial<Game>): Promise<Game> {
-    return this.gameModel.findOneAndDelete(id);
+  async delete(id: string): Promise<Game> {
+    return this.gameModel.findOneAndDelete({ _id: id });
   }
 }

@@ -51,7 +51,11 @@ export class GamesService {
     return this.gamesRepository.findOneAndUpdate({ _id }, gameUpdates);
   }
 
-  deleteGameById(_id: string): Promise<Game> {
-    return this.gamesRepository.delete({ _id });
+  deleteGamesById(ids: string[]): Promise<Game[]> {
+    return Promise.all(
+      ids.map((id) => {
+        return this.gamesRepository.delete(id);
+      }),
+    );
   }
 }

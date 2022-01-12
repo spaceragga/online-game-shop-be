@@ -41,7 +41,7 @@ export class UsersRepository extends CommonService<User> {
     });
   }
 
-  async delete(id: Partial<User>): Promise<User> {
-    return this.userModel.findOneAndDelete(id);
+  async delete(id: string): Promise<User> {
+    return this.userModel.findOneAndDelete({ _id: id });
   }
 }

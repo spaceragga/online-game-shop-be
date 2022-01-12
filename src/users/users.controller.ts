@@ -62,8 +62,8 @@ export class UsersController {
     return this.usersService.updateUser(id, updateUserDto);
   }
 
-  @Delete(':id')
-  deleteUser(@Param('id') id: string): Promise<User> {
-    return this.usersService.deleteUserById(id);
+  @Delete()
+  deleteUsers(@Query() { ids }: { ids: string[] }): Promise<User[]> {
+    return this.usersService.deleteUsersById(ids);
   }
 }

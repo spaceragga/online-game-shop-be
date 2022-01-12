@@ -28,6 +28,12 @@ export class User {
   profilePhoto: string;
 
   @Prop()
+  gotAchievements: string[];
+
+  @Prop()
+  discount: number;
+
+  @Prop()
   date: Date;
 }
 
@@ -37,6 +43,8 @@ export const UserSchema = new mongoose.Schema({
   role: { type: String, enum: Role, default: Role.USER },
   isBlocked: { type: Boolean, default: false },
   profilePhoto: { type: String, default: DEFAULT_PHOTO_URL },
+  gotAchievements: [{ type: String, default: [] }],
+  discount: { type: Number, default: 0 },
   date: { type: Date, default: Date.now },
 });
 

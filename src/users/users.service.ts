@@ -56,8 +56,12 @@ export class UsersService {
     return this.usersRepository.findOneAndUpdate({ _id }, userUpdates);
   }
 
-  deleteUserById(_id: string): Promise<User> {
-    return this.usersRepository.delete({ _id });
+  deleteUsersById(ids: string[]): Promise<User[]> {
+    return Promise.all(
+      ids.map((id) => {
+        return this.usersRepository.delete(id);
+      }),
+    );
   }
 
   async findByLogin(checkUser: User): Promise<User> {

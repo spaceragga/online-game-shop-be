@@ -5,4 +5,5 @@ export class UpdateUserDto {
   role: Role;
   isBlocked: boolean;
   profilePhoto: string;
+  gotAchievements: string[];
 }

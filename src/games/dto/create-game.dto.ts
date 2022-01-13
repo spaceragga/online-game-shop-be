@@ -1,4 +1,4 @@
-import { IsInt, IsString } from 'class-validator';
+import { IsDate, IsInt, IsString } from 'class-validator';
 
 export class CreateGameDto {
   @IsString()
@@ -30,4 +30,13 @@ export class CreateGameDto {
 
   @IsString()
   image: string;
+
+  @IsInt()
+  plannedDiscount: number;
+
+  @IsDate()
+  plannedDiscountStartsOn: Date;
+
+  @IsDate()
+  plannedDiscountEndsOn: Date;
 }

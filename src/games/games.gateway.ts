@@ -80,6 +80,8 @@ export class GamesGateway
       ),
     );
 
+    this.bookingOrders = [];
+
     return this.server.emit('ABORT_BOOKING');
   }
 

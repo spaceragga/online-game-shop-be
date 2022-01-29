@@ -5,7 +5,6 @@ import { UsersController } from './users.controller';
 import { UsersRepository } from './users.repository';
 import { CloudinaryModule } from '../cloudinary/cloudinary.module';
 import { UsersService } from './users.service';
-import { UsersGateway } from './users.gateway';
 import { AuthModule } from '../auth/auth.module';
 
 @Module({
@@ -15,7 +14,7 @@ import { AuthModule } from '../auth/auth.module';
     CloudinaryModule,
   ],
   controllers: [UsersController],
-  providers: [UsersService, UsersRepository, UsersGateway],
+  providers: [UsersService, UsersRepository],
   exports: [UsersService, UsersRepository],
 })
 export class UsersModule {}

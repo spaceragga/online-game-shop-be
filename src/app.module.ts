@@ -10,6 +10,7 @@ import { OrdersModule } from './orders/orders.module';
 import { AchievementsModule } from './achievements/achievements.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { CloudinaryProvider } from './cloudinary';
+import { DevelopersModule } from './developers/developers.module';
 
 const MONGODB_URL = config.get<string>('CONNECTIONS.MONGODB.URL');
 
@@ -25,6 +26,7 @@ const MONGODB_URL = config.get<string>('CONNECTIONS.MONGODB.URL');
     OrdersModule,
     AchievementsModule,
     CloudinaryModule,
+    DevelopersModule,
   ],
   controllers: [AppController],
   providers: [AppService, CloudinaryProvider],

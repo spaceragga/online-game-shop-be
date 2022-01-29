@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
 import { CommonService } from '../common/common.service';
 import { PaginatedResponse } from '../types/main.types';
-import { GetUsersQuery } from './dto/user-query.dto';
+import { GetQueryDTO } from '../types/validators';
 import { User, UserDocument } from './schemas/user.schema';
 import { UsersService } from './users.service';
 
@@ -22,7 +22,7 @@ export class UsersRepository extends CommonService<User> {
   }
 
   find(
-    usersFilterQuery: FilterQuery<GetUsersQuery>,
+    usersFilterQuery: FilterQuery<GetQueryDTO>,
   ): Promise<PaginatedResponse<User>> {
     return this.getEntityWithPagination(usersFilterQuery);
   }
@@ -41,7 +41,7 @@ export class UsersRepository extends CommonService<User> {
     });
   }
 
-  async delete(id: Partial<User>): Promise<User> {
-    return this.userModel.findOneAndDelete(id);
+  async delete(id: string): Promise<User> {
+    return this.userModel.findOneAndDelete({ _id: id });
   }
 }

@@ -3,7 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
 import { CommonService } from '../common/common.service';
 import { PaginatedResponse } from '../types/main.types';
-import { GetOrdersByIdQuery, GetOrdersQuery } from './dto/order-query.dto';
+import { GetQueryDTO } from '../types/validators';
+import { GetOrdersByIdQuery } from './dto/order-query.dto';
 import { Order, OrderDocument } from './schemas/order.schema';
 
 @Injectable()
@@ -23,7 +24,7 @@ export class OrdersRepository extends CommonService<Order> {
   }
 
   find(
-    orderFilterQuery: FilterQuery<GetOrdersQuery>,
+    orderFilterQuery: FilterQuery<GetQueryDTO>,
   ): Promise<PaginatedResponse<Order>> {
     return this.getEntityWithPagination(orderFilterQuery);
   }

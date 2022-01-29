@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
 import { CommonService } from '../common/common.service';
 import { PaginatedResponse } from '../types/main.types';
-import { GetGamesQuery } from './dto/game-query.dto';
+import { GetQueryDTO } from '../types/validators';
 import { Game, GameDocument } from './schemas/game.schema';
 
 @Injectable()
@@ -12,12 +12,43 @@ export class GamesRepository extends CommonService<Game> {
     super(gameModel);
   }
 
-  async findOne(gameFilterQuery: FilterQuery<GameDocument>): Promise<Game> {
-    return this.gameModel.findOne(gameFilterQuery);
+  async findTags(): Promise<string[]> {
+    return this.gameModel.distinct('genre');
+  }
+
+  async findGamesByQuery(gameFilterQuery: string): Promise<Game[]> {
+    return this.gameModel.find({
+      $or: [
+        { name: new RegExp(gameFilterQuery, 'i') },
+        { gameDev: new RegExp(gameFilterQuery, 'i') },
+      ],
+    });
+  }
+
+  async findOptionsByQuery(gameFilterQuery: string): Promise<string[]> {
+    const [names, gameDev] = await Promise.all([
+      this.gameModel
+        .find({
+          $or: [{ name: new RegExp(gameFilterQuery, 'i') }],
+        })
+        .distinct('name'),
+      this.gameModel
+        .find({
+          $or: [{ gameDev: new RegExp(gameFilterQuery, 'i') }],
+        })
+        .distinct('gameDev'),
+      ,
+    ]);
+
+    return names.concat(gameDev);
+  }
+
+  async findOne(id: string): Promise<Game> {
+    return this.gameModel.findOne({ _id: id });
   }
 
   find(
-    gamesFilterQuery: FilterQuery<GetGamesQuery>,
+    gamesFilterQuery: FilterQuery<GetQueryDTO>,
   ): Promise<PaginatedResponse<Game>> {
     return this.getEntityWithPagination(gamesFilterQuery);
   }
@@ -27,15 +58,15 @@ export class GamesRepository extends CommonService<Game> {
   }
 
   async findOneAndUpdate(
-    gameFilterQuery: FilterQuery<GameDocument>,
-    game: Partial<Game>,
+    id: string,
+    gameUpdates: Partial<Game>,
   ): Promise<Game> {
-    return this.gameModel.findOneAndUpdate(gameFilterQuery, game, {
+    return this.gameModel.findOneAndUpdate({ _id: id }, gameUpdates, {
       new: true,
     });
   }
 
-  async delete(id: Partial<Game>): Promise<Game> {
-    return this.gameModel.findOneAndDelete(id);
+  async delete(id: string): Promise<Game> {
+    return this.gameModel.findOneAndDelete({ _id: id });
   }
 }

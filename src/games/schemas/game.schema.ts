@@ -45,6 +45,15 @@ export class Game {
 
   @Prop()
   image: string;
+
+  @Prop()
+  plannedDiscount: number;
+
+  @Prop()
+  plannedDiscountStartsOn: Date;
+
+  @Prop()
+  plannedDiscountEndsOn: Date;
 }
 
 export const GameSchema = new mongoose.Schema({
@@ -62,4 +71,7 @@ export const GameSchema = new mongoose.Schema({
   price: { type: Number, required: true },
   amount: { type: Number, required: true },
   image: { type: String, required: true },
+  plannedDiscount: { type: Number, default: 0 },
+  plannedDiscountStartsOn: { type: Date, default: Date.now },
+  plannedDiscountEndsOn: { type: Date, default: Date.now },
 });

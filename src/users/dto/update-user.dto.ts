@@ -4,4 +4,6 @@ export class UpdateUserDto {
   password: string;
   role: Role;
   isBlocked: boolean;
+  profilePhoto: string;
+  gotAchievements: string[];
 }

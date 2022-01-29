@@ -7,6 +7,9 @@ import { UsersModule } from './users/users.module';
 import { GamesModule } from './games/games.module';
 import { AuthModule } from './auth/auth.module';
 import { OrdersModule } from './orders/orders.module';
+import { AchievementsModule } from './achievements/achievements.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { CloudinaryProvider } from './cloudinary';
 
 const MONGODB_URL = config.get<string>('CONNECTIONS.MONGODB.URL');
 
@@ -20,8 +23,10 @@ const MONGODB_URL = config.get<string>('CONNECTIONS.MONGODB.URL');
     GamesModule,
     AuthModule,
     OrdersModule,
+    AchievementsModule,
+    CloudinaryModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, CloudinaryProvider],
 })
 export class AppModule {}

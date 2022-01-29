@@ -1,8 +1,10 @@
 import {
+  IsArray,
   IsBoolean,
   IsDate,
   IsEmail,
   IsEnum,
+  IsInt,
   IsString,
   MinLength,
 } from 'class-validator';
@@ -24,4 +26,13 @@ export class CreateUserDto {
 
   @IsDate()
   date: Date;
+
+  @IsString()
+  profilePhoto: string;
+
+  @IsArray()
+  gotAchievements: string[];
+
+  @IsInt()
+  discount: number;
 }
